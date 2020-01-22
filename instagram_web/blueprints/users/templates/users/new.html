@@ -1,1 +1,65 @@
-<h1>Users#new</h1>
+{% extends '_layout.html' %}
+
+{% block content %}
+<form action="{{url_for('users.create')}}" method="POST">
+    <div class="form-group">
+        <label for="username">Username :</label>
+        <input type="text" class="form-control" name="username" required>
+        <div class="valid-feedback">Username valid</div>
+        <div class="invalid-feedback">Please use a valid username.</div>
+    </div>    
+    <div class="form-group">
+        <label for="email">Email :</label>
+        <input type="email" class="form-control" name="email" required>
+        <div class="valid-feedback">Email valid</div>
+        <div class="invalid-feedback">Please use a valid email.</div>
+    </div>    
+    <div class="form-group">
+        <label for="password">Password :</label>
+        <input type="password" class="form-control" name="password" required>
+        <div class="valid-feedback">Password valid</div>
+        <div class="invalid-feedback">Please use a valid password.</div>
+    </div>
+
+    <button id="submitButton" class="btn btn-primary" disabled type="submit">Sign Up</button>
+</form>
+<script>
+    let inputs = document.getElementsByClassName('form-control');
+    for (let i = 0;i<inputs.length;i++){
+        inputs[i].addEventListener('input',function(e){
+            document.getElementById("submitButton").setAttribute('disabled',true)
+            if (checkValid(e)){
+                inputs[i].classList.remove('is-invalid')
+                inputs[i].classList.add('is-valid')
+            }
+            else {
+                inputs[i].classList.remove('is-valid')
+                inputs[i].classList.add('is-invalid')
+            }
+            let checkField = document.getElementsByClassName('is-valid');
+            if (checkField.length == 3 ) {
+                document.getElementById("submitButton").removeAttribute('disabled')
+            }
+        })
+    }  
+    function checkValid(e){
+        let validation = false
+        if (e.target.name === 'username'){
+            if (e.target.value.length > 6){
+                validation = true
+            }
+        }
+        if (e.target.name === 'email'){
+            if (e.target.value.length > 6){
+                validation = true
+            }
+        }
+        if (e.target.name === 'password'){
+            if (e.target.value.length > 6){
+                validation = true
+            }
+        }
+        return validation
+    }
+</script>
+{% endblock %}
