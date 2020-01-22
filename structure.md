@@ -49,9 +49,9 @@ instagram_web/
                     new.html
             views.py
 
-        other_blueprint/
+        sessions/
             templates/
-                other_blueprint/
+                sessions/
                     new.html
             views.py
 

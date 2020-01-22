@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template,request,redirect,url_for
+from flask import Blueprint, render_template,request,redirect,url_for,flash
 from models.user import User
+from flask_login import current_user
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -29,7 +30,10 @@ def create():
 
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
-    pass
+    if current_user.is_authenticated:
+        return render_template("users/show.html",username=username)
+    else:
+        return redirect(url_for('sessions.new'))
 
 
 @users_blueprint.route('/', methods=["GET"])
