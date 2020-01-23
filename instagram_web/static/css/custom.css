@@ -3,6 +3,8 @@ body {
   padding-bottom: 15px;
   position: relative;
   min-height: 100vh;
+  font-family: 'Montserrat', sans-serif;
+  background-color: rgb(216, 221, 224);
 }
 
 footer {

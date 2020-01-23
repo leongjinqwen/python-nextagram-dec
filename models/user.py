@@ -10,7 +10,7 @@ class User(UserMixin,BaseModel):
     username = pw.CharField(unique=True)
     email = pw.CharField(unique=True)
     password = pw.CharField()
-    profile_image = pw.TextField(null=True)
+    profile_image = pw.TextField(default="2020-01-24_001222.992069default_profile.png")
 
     @hybrid_property
     def profile_image_url(self):

@@ -2,7 +2,6 @@ from flask import Blueprint, render_template,request,redirect,url_for,flash
 from models.user import User
 from flask_login import current_user,login_required
 from instagram_web.util.helpers import upload_file_to_s3
-from werkzeug.utils import secure_filename
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -32,8 +31,8 @@ def create():
 
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
-    
-    return render_template("users/show.html",username=username)
+    user = User.get(User.username==username)
+    return render_template("users/show.html",user=user)
    
 
 
@@ -89,7 +88,7 @@ def allowed_file(filename):
 
 @users_blueprint.route('/upload', methods=['POST'])
 def upload():
-    
+
     # check whether an input field with name 'user_file' exist
     if 'user_file' not in request.files:
         flash('No user_file key in request.files')
@@ -105,7 +104,6 @@ def upload():
 
     # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
     if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
         output = upload_file_to_s3(file) 
         if output:
             User.update(profile_image=output).where(User.id==current_user.id).execute()

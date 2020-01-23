@@ -1,6 +1,13 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-<h1>{{username}}</h1>
-<img src="{{current_user.profile_image_url }}" />
+<div class="">
+    <div class="d-block text-center">
+        <h1>{{user.username}}</h1>
+        
+        <img src="{{user.profile_image_url }}" width="200" class="img-thumbnail rounded-circle" alt="profile_image" />
+
+    </div>
+
+</div>
 {% endblock %}

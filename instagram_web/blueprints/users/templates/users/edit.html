@@ -1,45 +1,55 @@
 {% extends '_layout.html' %}
 
 {% block content %}
-<h1>{{user.username}}</h1>
-<form action="{{url_for('users.update',id=user.id)}}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <label for="username">Username :</label>
-    <div class="input-group">
-        <input type="text" class="form-control" disabled name="username" value={{user.username}} placeholder="User's username" aria-label="User's username with two button addons" aria-describedby="button-addon4">
-        <button class="btn btn-outline-primary edit" type="button">Edit</button>
-        <button class="btn btn-outline-success" type="submit">Submit</button>
-    </div>
-</form>
-<form action="{{url_for('users.update',id=user.id)}}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <label for="email">Email :</label>
-    <div class="input-group">
-        <input type="email" class="form-control" disabled name="email" value={{user.email}} placeholder="User's email" aria-label="User's e with two button addons" aria-describedby="button-addon4">
-        <button class="btn btn-outline-primary edit" type="button">Edit</button>
-        <button class="btn btn-outline-success" type="submit">Submit</button>
-    </div>
-</form>
-<form action="{{url_for('users.update',id=user.id)}}" method="POST">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <label for="password">Password :</label>
-    <div class="input-group">
-        <input type="password" class="form-control" disabled name="password" placeholder="New password" aria-label="User's password with two button addons" aria-describedby="button-addon4">
-        <button class="btn btn-outline-primary edit" type="button">Edit</button>
-        <button class="btn btn-outline-success" type="submit">Submit</button>
-    </div>
-</form>
+<div class="col-6 mx-auto">
 
-
-<form action="{{url_for('users.upload')}}" method="POST" enctype="multipart/form-data">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-    <label for="user_file">Upload Your File:</label>
-    <br>
-    <input type="file" name="user_file">
-    <br>
-    <button type="submit">Upload</button>
-
-</form>
+    <h1 class="text-center">{{user.username}}</h1>
+    <form action="{{url_for('users.update',id=user.id)}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <label for="username">Username :</label>
+        <div class="input-group">
+            <input type="text" class="form-control" disabled name="username" value={{user.username}} placeholder="User's username" aria-label="User's username with two button addons" aria-describedby="button-addon4">
+            <button class="btn btn-outline-primary edit" type="button">Edit</button>
+            <button class="btn btn-outline-success" type="submit">Submit</button>
+        </div>
+    </form>
+    <form action="{{url_for('users.update',id=user.id)}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <label for="email">Email :</label>
+        <div class="input-group">
+            <input type="email" class="form-control" disabled name="email" value={{user.email}} placeholder="User's email" aria-label="User's e with two button addons" aria-describedby="button-addon4">
+            <button class="btn btn-outline-primary edit" type="button">Edit</button>
+            <button class="btn btn-outline-success" type="submit">Submit</button>
+        </div>
+    </form>
+    <form action="{{url_for('users.update',id=user.id)}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <label for="password">Password :</label>
+        <div class="input-group">
+            <input type="password" class="form-control" disabled name="password" placeholder="New password" aria-label="User's password with two button addons" aria-describedby="button-addon4">
+            <button class="btn btn-outline-primary edit" type="button">Edit</button>
+            <button class="btn btn-outline-success" type="submit">Submit</button>
+        </div>
+    </form>
+    <form action="{{url_for('users.upload')}}" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="px-0">
+            <label for="password">Profile image :</label>
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" id="customFile" class="custom-file-input" name="user_file" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04">
+                    <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <button class="btn btn-outline-success" type="submit" id="inputGroupFileAddon04">Upload</button>
+                </div>
+            </div>
+        </div>
+        <div class="text-center rounded mt-4">
+            <img id="image" width="400" />
+        </div>
+    </form>
+</div>
 
 <script>
     let editButtons = document.getElementsByClassName('edit')
@@ -52,7 +62,18 @@
                 e.target.previousElementSibling.setAttribute('disabled',true)
             }
         })
-
     }
+    // live preview image
+    document.getElementById("customFile").onchange = function () {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+            document.getElementById("image").src = e.target.result;
+        };
+        reader.readAsDataURL(this.files[0]);
+    };
+    $('.custom-file-input').on('change', function() { 
+        let fileName = $(this).val().split('\\').pop(); 
+        $(this).next('.custom-file-label').addClass("selected").html(fileName); 
+    });
 </script>
 {% endblock %}
