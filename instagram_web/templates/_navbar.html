@@ -7,6 +7,12 @@
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
         <li>
+          <a href="{{ url_for('users.show',username=current_user.username)}}">Profile</a>
+        </li>
+        <li>
+          <a href="{{ url_for('users.edit',id=current_user.id)}}">Edit</a>
+        </li>
+        <li>
           <a href="{{ url_for('sessions.destroy')}}">Sign Out</a>
         </li>
       {% else %}
