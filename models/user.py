@@ -3,11 +3,18 @@ import peewee as pw
 import re
 from werkzeug.security import generate_password_hash
 from flask_login import UserMixin
+import os
+from playhouse.hybrid import hybrid_property
 
 class User(UserMixin,BaseModel):
     username = pw.CharField(unique=True)
     email = pw.CharField(unique=True)
     password = pw.CharField()
+    profile_image = pw.TextField(null=True)
+
+    @hybrid_property
+    def profile_image_url(self):
+        return os.getenv("AWS_DOMAIN") + self.profile_image
 
     def validate(self):
         duplicate_username = User.get_or_none(User.username==self.username)
