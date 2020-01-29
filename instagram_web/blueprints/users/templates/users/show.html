@@ -3,8 +3,34 @@
 {% block content %}
 <div class="">
     <div class="d-block text-center">
-        <h1>{{user.username}}</h1>
+        <h1>@{{user.username}}</h1>
         <img src="{{user.profile_image_url }}" width="200" class="img-thumbnail rounded-circle" alt="profile_image" />
+        <nav class="level">
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Posts</p>
+                <p class="title">{{user.images | length}}</p>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Following</p>
+                <p class="title">0</p>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Followers</p>
+                <p class="title">0</p>
+              </div>
+            </div>
+            <div class="level-item has-text-centered">
+              <div>
+                <p class="heading">Likes</p>
+                <p class="title">0</p>
+              </div>
+            </div>
+          </nav>
     </div>
     <div class="row mt-5">
         {% for image in user.images %}
@@ -19,7 +45,9 @@
                     Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                     Phasellus nec iaculis mauris.
                     <br>
-                    <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+                    <small class="text-secondary">
+                        <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+                    </small>
                   </div>
                 </div>
             </div>

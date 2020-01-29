@@ -21,5 +21,5 @@ def internal_server_error(e):
 @app.route("/")
 def home():
     from models.image import Image
-    images = Image.select()
+    images = Image.select().order_by(Image.created_at.desc())
     return render_template('home.html',images=images)

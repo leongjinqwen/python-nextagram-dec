@@ -15,24 +15,25 @@
         </figure>
       </div>
       <div class="card-content">
-        <div class="media">
-          <div class="media-left">
-            <figure class="image is-48x48">
-              <img src="{{image.user.profile_image_url}}" alt="profile_image">
-            </figure>
+        <a style="text-decoration: none;" href="{{url_for('users.show',username=image.user.username)}}">
+          <div class="media">
+            <div class="media-left">
+              <figure class="image is-48x48">
+                <img src="{{image.user.profile_image_url}}" alt="profile_image">
+              </figure>
+            </div>
+            <div class="media-content">
+              <p class="title is-4">{{image.user.username}}</p>
+              <small class="text-secondary">
+                <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+              </small>
+            </div>
           </div>
-          <div class="media-content">
-            <p class="title is-4">{{image.user.username}}</p>
-            <a href="{{url_for('users.show',username=image.user.username)}}">
-              <p class="subtitle is-6">@{{image.user.username}}</p>
-            </a>
-          </div>
-        </div>
+        </a>
         <div class="content">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit.
           Phasellus nec iaculis mauris.
           <br>
-          <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
         </div>
       </div>
     </div>
