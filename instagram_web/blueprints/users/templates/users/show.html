@@ -1,12 +1,30 @@
 {% extends '_layout.html' %}
-
+{% block title %}{{user.username}}'s profile{% endblock %}
 {% block content %}
 <div class="">
     <div class="d-block text-center">
         <h1>{{user.username}}</h1>
-        
         <img src="{{user.profile_image_url }}" width="200" class="img-thumbnail rounded-circle" alt="profile_image" />
-
+    </div>
+    <div class="row mt-5">
+        {% for image in user.images %}
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-image">
+                  <figure class="image" style="background-image: url('{{image.image_url}}');background-size:cover;background-repeat: no-repeat;padding-top:90%;background-position: center;">
+                  </figure>
+                </div>
+                <div class="card-content">
+                  <div class="content">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                    Phasellus nec iaculis mauris.
+                    <br>
+                    <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+                  </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 
 </div>

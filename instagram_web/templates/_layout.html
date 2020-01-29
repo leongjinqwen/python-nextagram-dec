@@ -4,9 +4,12 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <link rel="shortcut icon" href="{{ url_for('static', filename='image/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='images/next.ico') }}">
     <!-- google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
+    <!-- Bulma -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    
     {% assets "home_css" %}
       <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets %}
@@ -19,14 +22,16 @@
     {% endblock %}
 
     <title>
-      {% block title %}
-      {% endblock %}NEXTAGRAM
+      {% block title %}{% endblock %} | Nextagram
     </title>
 
   </head>
   <body>
     {% include '_navbar.html' %}
-
+    <!-- loader -->
+    <div style="min-height: 10px;">
+      <progress id="loader" class="progress insta-color mb-0" max="100"></progress>
+    </div>
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <ul class=flashes>
@@ -41,8 +46,13 @@
       {% block content %}
       {% endblock %}
     </div>
-    <footer>
+    {#<footer>
       Made with &hearts; at <a target="_blank" href="https://www.nextacademy.com/?utm_source=github&utm_medium=student-challenge&utm_campaign=flask-nextagram">NEXT Academy</a>
-    </footer>
+    </footer>#}
+    <script>
+      $(document).ready(function() {
+        $("#loader").fadeOut(1500)
+      });
+    </script>
   </body>
 </html>

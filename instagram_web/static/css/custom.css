@@ -21,3 +21,28 @@ footer a {
   text-decoration: none;
   color: #303030;
 }
+
+.progress {
+  margin: 0;
+  height: 3px;
+  background-color: aliceblue;
+}
+
+.insta-color:indeterminate {
+  background-image: linear-gradient(to right, rgb(172, 1, 172),rgb(235, 28, 131),rgb(236, 126, 0),rgb(238, 238, 7));
+}
+.card-content {
+  padding: 1rem;
+}
+.card .media:not(:last-child) {
+  margin-bottom: 1rem;
+}
+.media-content .subtitle {
+  margin-bottom: 0;
+}
+.media-content .title {
+  margin-bottom: 0.3rem;
+}
+figure {
+  margin: 0;
+}

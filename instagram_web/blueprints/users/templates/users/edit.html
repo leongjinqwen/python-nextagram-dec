@@ -1,5 +1,5 @@
 {% extends '_layout.html' %}
-
+{% block title %}Setting{% endblock %}
 {% block content %}
 <div class="col-6 mx-auto">
 
@@ -31,6 +31,13 @@
             <button class="btn btn-outline-success" type="submit">Submit</button>
         </div>
     </form>
+    <form action="{{url_for('users.update',id=user.id)}}" method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <label class="checkbox">
+            <input type="checkbox" name="private"> Private
+        </label>
+    </form>
+    <!-- upload profile image -->
     <form action="{{url_for('users.upload')}}" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <div class="px-0">
@@ -41,7 +48,7 @@
                     <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
                 </div>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-success" type="submit" id="inputGroupFileAddon04">Upload</button>
+                    <button class="btn btn-outline-success" type="submit" id="inputGroupFileAddon">Upload</button>
                 </div>
             </div>
         </div>

@@ -4,9 +4,38 @@
   Homepage
 {% endblock %}
 
-{% block header %}
-{% endblock %}
 
 {% block content %}
-  <h1>Homepage</h1>
+{% for image in images %}
+  <div class="d-flex justify-content-center mb-3">
+    <div class="card w-50">
+      <div class="card-image">
+        <figure class="image">
+          <img src="{{image.image_url}}" alt="post_image">
+        </figure>
+      </div>
+      <div class="card-content">
+        <div class="media">
+          <div class="media-left">
+            <figure class="image is-48x48">
+              <img src="{{image.user.profile_image_url}}" alt="profile_image">
+            </figure>
+          </div>
+          <div class="media-content">
+            <p class="title is-4">{{image.user.username}}</p>
+            <a href="{{url_for('users.show',username=image.user.username)}}">
+              <p class="subtitle is-6">@{{image.user.username}}</p>
+            </a>
+          </div>
+        </div>
+        <div class="content">
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Phasellus nec iaculis mauris.
+          <br>
+          <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 {% endblock %}

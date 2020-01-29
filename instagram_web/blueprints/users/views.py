@@ -1,7 +1,9 @@
 from flask import Blueprint, render_template,request,redirect,url_for,flash
 from models.user import User
 from flask_login import current_user,login_required
-from instagram_web.util.helpers import upload_file_to_s3
+from werkzeug.utils import secure_filename
+from instagram_web.util.helpers import upload_file_to_s3,allowed_file
+import datetime
 
 users_blueprint = Blueprint('users',
                             __name__,
@@ -38,6 +40,7 @@ def show(username):
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
+    users = User.select()
     return "USERS"
 
 
@@ -79,13 +82,6 @@ def update(id):
         return redirect(url_for('users.show',username=current_user.username))
         
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
-
-# function to check file extension
-def allowed_file(filename):
-    return '.' in filename and \
-        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 @users_blueprint.route('/upload', methods=['POST'])
 def upload():
 
@@ -104,13 +100,14 @@ def upload():
 
     # check whether the file extension is allowed (eg. png,jpeg,jpg,gif)
     if file and allowed_file(file.filename):
+        file.filename = secure_filename(f"{str(datetime.datetime.now())}{file.filename}")
         output = upload_file_to_s3(file) 
         if output:
-            User.update(profile_image=output).where(User.id==current_user.id).execute()
-            flash("Image successfully uploaded","success")
+            User.update(profile_image=file.filename).where(User.id==current_user.id).execute()
+            flash("Profile image successfully uploaded","success")
             return redirect(url_for('users.show',username=current_user.username))
         else:
-            flash("Image upload failed","danger")
+            flash(output,"danger")
             return redirect(url_for('users.edit',id=current_user.id))
 
     # if file extension not allowed

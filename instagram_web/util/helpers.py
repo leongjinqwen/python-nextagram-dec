@@ -1,7 +1,5 @@
 import os
 import boto3, botocore
-from werkzeug.utils import secure_filename
-import datetime
 
 s3 = boto3.client(
     's3',
@@ -11,8 +9,6 @@ s3 = boto3.client(
 
 def upload_file_to_s3(file,acl="public-read"):
     
-    file.filename = secure_filename(f"{str(datetime.datetime.now())}{file.filename}")
-    print(file.filename)
     try:
 
         s3.upload_fileobj(
@@ -30,4 +26,12 @@ def upload_file_to_s3(file,acl="public-read"):
         print("Something Happened: ", e)
         return e
 
-    return file.filename
+    return True
+
+
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+
+# function to check file extension
+def allowed_file(filename):
+    return '.' in filename and \
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
