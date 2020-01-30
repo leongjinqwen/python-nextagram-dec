@@ -33,7 +33,7 @@
           </nav>
     </div>
     <div class="row mt-5">
-        {% for image in user.images %}
+        {% for image in images %}
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-image">
@@ -42,18 +42,21 @@
                 </div>
                 <div class="card-content">
                   <div class="content">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                    Phasellus nec iaculis mauris.
-                    <br>
+                    <p class="m-0">{{image.caption}}</p>
                     <small class="text-secondary">
                         <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
                     </small>
+                    {% if current_user != user %}
+                    <br>
+                    <a href="{{url_for('endorsement.new',id=image.id)}}" class="btn btn-primary">Donate</a>
+                    <span>Accumulated ${{ image.endorsements | sum(attribute='amount')}}</span>
+                    {% endif %}
                   </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
 </div>
+
 {% endblock %}

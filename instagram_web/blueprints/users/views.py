@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template,request,redirect,url_for,flash
 from models.user import User
+from models.image import Image
 from flask_login import current_user,login_required
 from werkzeug.utils import secure_filename
 from instagram_web.util.helpers import upload_file_to_s3,allowed_file
@@ -34,15 +35,13 @@ def create():
 @users_blueprint.route('/<username>', methods=["GET"])
 def show(username):
     user = User.get(User.username==username)
-    return render_template("users/show.html",user=user)
-   
-
+    images = Image.select().where(Image.user==user.id)
+    return render_template("users/show.html",user=user,images=images)
 
 @users_blueprint.route('/', methods=["GET"])
 def index():
     users = User.select()
     return "USERS"
-
 
 @users_blueprint.route('/<id>/edit', methods=['GET'])
 @login_required
