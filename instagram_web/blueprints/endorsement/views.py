@@ -5,6 +5,7 @@ from models.endorsement import Endorsement
 from flask_login import current_user, login_required
 import os
 import braintree
+from instagram_web.util.mail_helpers import endorsement_email
 
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
@@ -42,6 +43,8 @@ def create(id):
         print(result)
         endorse = Endorsement(donor=current_user.id,image=id,amount=result.transaction.amount)
         if endorse.save():
+            receiver = Image.get_by_id(id).user
+            endorsement_email(receiver,result.transaction.amount)
             flash("Payment made.","success")
             return redirect(url_for('users.show',username=current_user.username))
         else:

@@ -23,5 +23,7 @@ def internal_server_error(e):
 @app.route("/")
 def home():
     from models.image import Image
+    from models.user import User
+    users = User.select()
     images = Image.select().order_by(Image.created_at.desc())
-    return render_template('home.html',images=images)
+    return render_template('home.html',images=images,users=users)

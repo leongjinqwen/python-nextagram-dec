@@ -33,7 +33,7 @@ def create():
         file.filename = secure_filename(f"{str(datetime.datetime.now())}{file.filename}")
         output = upload_file_to_s3(file) 
         if output:
-            image = Image(user=current_user.id,image_path=file.filename)
+            image = Image(user=current_user.id,image_path=file.filename,caption=request.form.get("caption"))
             image.save()
             flash("Image successfully uploaded","success")
             return redirect(url_for('users.show',username=current_user.username))
