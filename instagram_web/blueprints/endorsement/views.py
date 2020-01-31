@@ -43,8 +43,8 @@ def create(id):
         print(result)
         endorse = Endorsement(donor=current_user.id,image=id,amount=result.transaction.amount)
         if endorse.save():
-            receiver = Image.get_by_id(id).user
-            endorsement_email(receiver,result.transaction.amount)
+            # send email to user that make donation
+            endorsement_email(current_user,result.transaction.amount)
             flash("Payment made.","success")
             return redirect(url_for('users.show',username=current_user.username))
         else:
