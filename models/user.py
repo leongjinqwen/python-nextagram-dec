@@ -15,8 +15,9 @@ class User(UserMixin,BaseModel):
     
     def follow(self,idol):
         from models.fanidol import FanIdol
-        if self.private==True:
-            return FanIdol(fan=self.id,idol=idol.id).save()
+        # check if idol is private
+        if idol.private==True:
+            return FanIdol(fan=self.id,idol=idol.id,approved=False).save()
         else:
             return FanIdol(fan=self.id,idol=idol.id,approved=True).save()
 
@@ -26,18 +27,21 @@ class User(UserMixin,BaseModel):
 
     def follow_status(self,idol):
         from models.fanidol import FanIdol
+        # check following status : if already follow => return that row, else return None(mean not follow this idol before)
         return FanIdol.get_or_none(FanIdol.fan==self.id,FanIdol.idol==idol.id)
 
     @hybrid_property
     def followers(self):
         from models.fanidol import FanIdol
-        fans = FanIdol.select(FanIdol.fan).where(FanIdol.idol==self.id)
+        # to get all fans
+        fans = FanIdol.select(FanIdol.fan).where(FanIdol.idol==self.id,FanIdol.approved==True)
         return User.select().where(User.id.in_(fans))
 
     @hybrid_property
     def followings(self):
         from models.fanidol import FanIdol
-        idols = FanIdol.select(FanIdol.idol).where(FanIdol.fan==self.id)
+        # to get all idols
+        idols = FanIdol.select(FanIdol.idol).where(FanIdol.fan==self.id,FanIdol.approved==True)
         return User.select().where(User.id.in_(idols))
     
     @hybrid_property
