@@ -3,34 +3,47 @@
 {% block content %}
 <div class="">
     <div class="d-block text-center">
-        <h1>@{{user.username}}</h1>
-        <img src="{{user.profile_image_url }}" width="200" class="img-thumbnail rounded-circle" alt="profile_image" />
-        <nav class="level">
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">Posts</p>
-                <p class="title">{{user.images | length}}</p>
-              </div>
-            </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">Following</p>
-                <p class="title">0</p>
-              </div>
-            </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">Followers</p>
-                <p class="title">0</p>
-              </div>
-            </div>
-            <div class="level-item has-text-centered">
-              <div>
-                <p class="heading">Likes</p>
-                <p class="title">0</p>
-              </div>
-            </div>
-          </nav>
+      
+      {% if current_user != user %}
+        {% if current_user.follow_status(user) %}
+          {% if current_user.follow_status(user).approved %}
+            <a class="btn btn-danger" href="{{url_for('follows.destroy',idol_id=user.id)}}">Unfollow</a>
+          {% else %}
+            <a class="btn btn-warning" href="#">Pending</a>
+          {% endif %}
+        {% else %}
+          <a class="btn btn-success" href="{{url_for('follows.create',idol_id=user.id)}}">Follow</a>
+        {% endif %}
+      {% endif %}
+
+      <h1>@{{user.username}}</h1>
+      <img src="{{user.profile_image_url }}" width="200" class="img-thumbnail rounded-circle" alt="profile_image" />
+      <nav class="level">
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Posts</p>
+            <p class="title">{{user.images | length}}</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Following</p>
+            <p class="title">0</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Followers</p>
+            <p class="title">0</p>
+          </div>
+        </div>
+        <div class="level-item has-text-centered">
+          <div>
+            <p class="heading">Likes</p>
+            <p class="title">0</p>
+          </div>
+        </div>
+      </nav>
     </div>
     <div class="row mt-5">
         {% for image in images %}

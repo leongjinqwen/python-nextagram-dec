@@ -11,7 +11,35 @@ class User(UserMixin,BaseModel):
     email = pw.CharField(unique=True)
     password = pw.CharField()
     profile_image = pw.TextField(default="blank-profile-picture.png")
+    private = pw.BooleanField(default=False)
+    
+    def follow(self,idol):
+        from models.fanidol import FanIdol
+        if self.private==True:
+            return FanIdol(fan=self.id,idol=idol.id).save()
+        else:
+            return FanIdol(fan=self.id,idol=idol.id,approved=True).save()
 
+    def unfollow(self,idol):
+        from models.fanidol import FanIdol
+        return FanIdol.delete().where(FanIdol.fan==self.id,FanIdol.idol==idol.id).execute()
+
+    def follow_status(self,idol):
+        from models.fanidol import FanIdol
+        return FanIdol.get_or_none(FanIdol.fan==self.id,FanIdol.idol==idol.id)
+
+    @hybrid_property
+    def followers(self):
+        from models.fanidol import FanIdol
+        fans = FanIdol.select(FanIdol.fan).where(FanIdol.idol==self.id)
+        return User.select().where(User.id.in_(fans))
+
+    @hybrid_property
+    def followings(self):
+        from models.fanidol import FanIdol
+        idols = FanIdol.select(FanIdol.idol).where(FanIdol.fan==self.id)
+        return User.select().where(User.id.in_(idols))
+    
     @hybrid_property
     def profile_image_url(self):
         return os.getenv("AWS_DOMAIN") + self.profile_image
