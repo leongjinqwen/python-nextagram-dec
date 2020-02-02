@@ -25,10 +25,23 @@ class User(UserMixin,BaseModel):
         from models.fanidol import FanIdol
         return FanIdol.delete().where(FanIdol.fan==self.id,FanIdol.idol==idol.id).execute()
 
+    # def delete_request(self,fan):
+    #     from models.fanidol import FanIdol
+    #     return FanIdol.delete().where(FanIdol.fan==fan.id,FanIdol.idol==self.id).execute()
+
+    def approve_request(self,fan):
+        from models.fanidol import FanIdol
+        return FanIdol.update(approved=True).where(FanIdol.fan==fan.id,FanIdol.idol==self.id).execute()
+
     def follow_status(self,idol):
         from models.fanidol import FanIdol
         # check following status : if already follow => return that row, else return None(mean not follow this idol before)
         return FanIdol.get_or_none(FanIdol.fan==self.id,FanIdol.idol==idol.id)
+
+    @hybrid_property
+    def get_request(self):
+        from models.fanidol import FanIdol
+        return FanIdol.select().where(FanIdol.idol==self.id,FanIdol.approved==False)
 
     @hybrid_property
     def followers(self):

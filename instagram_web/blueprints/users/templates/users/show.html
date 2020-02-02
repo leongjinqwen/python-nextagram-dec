@@ -18,6 +18,8 @@
         {% else %}
           <a class="btn btn-outline-dark btn-sm" href="{{url_for('follows.create',idol_id=user.id)}}">Follow</a>
         {% endif %}
+      {% else %}
+          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('users.edit',id=current_user.id)}}">Edit</a>  
       {% endif %}
     </div>
   </div>
@@ -25,20 +27,20 @@
     <nav class="level">
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">Posts</p>
+          <p class="heading">posts</p>
           <p class="title">{{user.images | length}}</p>
         </div>
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">Followings</p>
-          <p class="title">{{user.followings | length}}</p>
+          <p class="heading">followers</p>
+          <p class="title">{{user.followers | length}}</p>
         </div>
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">Followers</p>
-          <p class="title">{{user.followers | length}}</p>
+          <p class="heading">following</p>
+          <p class="title">{{user.followings | length}}</p>
         </div>
       </div>
       <div class="level-item has-text-centered">
@@ -49,24 +51,24 @@
       </div>
     </nav>
   </div>
+  <!-- if (follow status is approve)/(current_user is user)/(user is not private),show images -->
+  {% if current_user==user or user.private == False or current_user.follow_status(user).approved %}
     <div class="row mt-5">
         {% for image in images %}
         <div class="col-md-4 mb-3">
             <div class="card">
                 <div class="card-image">
-                  <figure class="image" style="background-image: url('{{image.image_url}}');background-size:cover;background-repeat: no-repeat;padding-top:90%;background-position: center;">
-                  </figure>
+                  <figure class="image" style="background-image: url('{{image.image_url}}');background-size:cover;background-repeat: no-repeat;padding-top:90%;background-position: center;"></figure>
                 </div>
                 <div class="card-content">
                   <div class="content">
                     <p class="m-0">{{image.caption}}</p>
                     <small class="text-secondary">
-                        <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
+                      <time>- {{image.created_at.strftime('%I:%M %p, %b %d')}}</time>
                     </small>
+                    <p>Accumulated ${{ image.endorsements | sum(attribute='amount')}}</p>
                     {% if current_user != user %}
-                    <br>
                     <a href="{{url_for('endorsement.new',id=image.id)}}" class="btn btn-primary">Donate</a>
-                    <span>Accumulated ${{ image.endorsements | sum(attribute='amount')}}</span>
                     {% endif %}
                   </div>
                 </div>
@@ -74,12 +76,10 @@
         </div>
         {% endfor %}
     </div>
-    {% for follower in user.followers %}
-    <p>{{follower.username}}</p>
-    {% endfor %}
-    {% for idol in user.followings %}
-    <p>{{idol.username}}</p>
-    {% endfor %}
+  {% else %}
+    <h5 class="text-center text-secondary mt-5">Follow @{{user.username}} to view the profile.</h5>
+  {% endif %}
+  
 </div>
 
 <!-- cancel request Modal -->
@@ -89,7 +89,7 @@
       <div class="modal-body text-center">
         <img src="{{user.profile_image_url }}" width="100" class="rounded-circle my-3" alt="profile_image" />
         <p>If you change your mind, you'll have to request to follow <strong>@{{user.username}}</strong> again.</p>
-        <a href="{{url_for('follows.destroy',idol_id=user.id)}}" class="btn btn-primary">Unfollow</a>
+        <a href="{{url_for('follows.unfollow',idol_id=user.id)}}" class="btn btn-primary">Unfollow</a>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>
@@ -102,7 +102,7 @@
       <div class="modal-body text-center">
         <img src="{{user.profile_image_url }}" width="100" class="rounded-circle my-3" alt="profile_image" />
         <p>Unfollow <strong>@{{user.username}}</strong>?</p>
-        <a href="{{url_for('follows.destroy',idol_id=user.id)}}" class="btn btn-primary">Unfollow</a>
+        <a href="{{url_for('follows.unfollow',idol_id=user.id)}}" class="btn btn-primary">Unfollow</a>
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
       </div>
     </div>

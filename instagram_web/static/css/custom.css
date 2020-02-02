@@ -49,3 +49,7 @@ figure {
   background: linear-gradient(to right, rgb(172, 1, 172),rgb(235, 28, 131),rgb(236, 126, 0),rgb(238, 238, 7));
   padding: 0.18rem;
 }
+
+.dropdown-menu {
+  min-width: 25rem;
+}

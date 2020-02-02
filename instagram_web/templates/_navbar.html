@@ -9,14 +9,36 @@
   <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
     <ul class="navbar-nav">
       {% if current_user.is_authenticated %}
+        <div class="dropdown is-right">
+          <div class="dropdown-trigger">
+            <a id="showRequest" class="nav-link" aria-haspopup="true" aria-controls="dropdown-menu3">Request</a>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu3" role="menu">
+            <div class="dropdown-content">
+              <div class="px-4 mb-2">
+                <h6 class="m-0">{{current_user.get_request|length}} Follow Requests</h6>
+                <small class="text-secondary">Approve or ignore requests</small>
+              </div>
+              {% for request in current_user.get_request %}
+                <div class="dropdown-item d-flex justify-content-between">
+                  <a style="text-decoration: none;color:black" href="{{url_for('users.show',username=request.fan.username)}}">
+                    <img src="{{request.fan.profile_image_url }}" width="48" class="img-thumbnail rounded-circle" alt="profile_image" />
+                    <span>{{request.fan.username}}</span>
+                  </a>
+                  <div class="align-self-center">
+                    <a class="btn btn-primary btn-sm" href="{{url_for('follows.update',fan_id=request.fan.id)}}">Confirm</a>
+                    <a class="btn btn-outline-dark btn-sm" href="{{url_for('follows.destroy',fan_id=request.fan.id)}}">Delete</a>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
         <li class="nav-item">
           <a class="nav-link" href="#" data-toggle="modal" data-target="#exampleModal">Upload</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('users.show',username=current_user.username)}}">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{{ url_for('users.edit',id=current_user.id)}}">Edit</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="{{ url_for('sessions.destroy')}}">Sign Out</a>
@@ -62,6 +84,11 @@
     </div>
   </div>
 </div>
+
+<!-- follow request -->
+
+
+
 <script>
   // live preview image
   document.getElementById("uploadFile").onchange = function () {
@@ -75,4 +102,13 @@
     let fileName = $(this).val().split('\\').pop(); 
     $(this).next('.custom-file-label').addClass("selected").html(fileName); 
   });
+  // control dropdown
+  $("#showRequest").click(function(){
+    if ($(".dropdown").hasClass("is-active")){
+      $(".dropdown").removeClass("is-active")
+
+    }else{
+      $(".dropdown").addClass("is-active")
+    }
+  })
 </script>
