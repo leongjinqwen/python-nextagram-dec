@@ -14,10 +14,7 @@ follows_blueprint = Blueprint('follows',
 def create(idol_id):
     idol = User.get_by_id(idol_id)
     if current_user.follow(idol):
-        if idol.private:
-            flash(f"You send follow request to {idol.username}","success")
-        else:
-            flash(f"You follow {idol.username}","success")
+        flash(f"You send follow request to {idol.username}","success")
         return redirect(url_for('users.show',username=idol.username))
     else:
         flash(f"You not yet follow {idol.username}","danger")

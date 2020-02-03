@@ -19,7 +19,7 @@
           <a class="btn btn-outline-dark btn-sm" href="{{url_for('follows.create',idol_id=user.id)}}">Follow</a>
         {% endif %}
       {% else %}
-          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('users.edit',id=current_user.id)}}">Edit</a>  
+          <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('users.edit',id=user.id)}}">Edit</a>  
       {% endif %}
     </div>
   </div>

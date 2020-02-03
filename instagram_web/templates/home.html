@@ -41,7 +41,7 @@
 
   <div class="col-md-4">
     <div class="card-content">
-      <a style="text-decoration: none;" href="{{url_for('users.show',username=current_user.username)}}">
+      <a style="text-decoration: none;color:black" href="{{url_for('users.show',username=current_user.username)}}">
         <div class="media">
           <div class="media-left">
             <figure class="image is-48x48 ">
@@ -49,17 +49,39 @@
             </figure>
           </div>
           <div class="media-content">
-            <p class="subtitle is-4">{{current_user.username}}</p>
+            <p class="is-4 m-0 p-0">{{current_user.username}}</p>
+            <small class="text-secondary m-0">@{{current_user.username}}</small>
           </div>
         </div>
       </a>
     </div>
     
-    <div class="card">
+    <div class="card mb-3">
+      <span class="mt-2 ml-3">Your following</span>
       {% for user in users %}
-      {% if user != current_user %}
-      <div class="card-content">
-        <a style="text-decoration: none;" href="{{url_for('users.show',username=user.username)}}">
+        {% if user != current_user %}
+        <div class="card-content py-1">
+          <a style="text-decoration: none;color:black" href="{{url_for('users.show',username=user.username)}}">
+            <div class="media">
+              <div class="media-left">
+                <figure class="image is-48x48 ">
+                  <img src="{{user.profile_image_url}}" class="img-thumbnail rounded-circle" alt="profile_image">
+                </figure>
+              </div>
+              <div class="media-content">
+                <p class="is-4">{{user.username}}</p>
+              </div>
+            </div>
+          </a>
+        </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="card">
+      <span class="mt-2 ml-3">Suggestions For You</span>
+      {% for user in not_following %}
+      <div class="card-content py-1 d-flex justify-content-between">
+        <a style="text-decoration: none;color:black;" href="{{url_for('users.show',username=user.username)}}">
           <div class="media">
             <div class="media-left">
               <figure class="image is-48x48 ">
@@ -67,14 +89,17 @@
               </figure>
             </div>
             <div class="media-content">
-              <p class="subtitle is-4">{{user.username}}</p>
+              <p class="is-4">{{user.username}}</p>
             </div>
           </div>
         </a>
+        <div class="">
+          <a class="btn btn-outline-secondary btn-sm" href="{{url_for('follows.create',idol_id=user.id)}}">Follow</a>
+        </div>
       </div>
-      {% endif %}
       {% endfor %}
     </div>
   </div>
 </div>
+
 {% endblock %}

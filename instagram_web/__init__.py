@@ -7,7 +7,7 @@ from instagram_web.blueprints.endorsement.views import endorsement_blueprint
 from instagram_web.blueprints.follows.views import follows_blueprint
 from flask_assets import Environment, Bundle
 from .util.assets import bundles
-from flask_login import login_required
+from flask_login import login_required,current_user
 from instagram_web.util.google_oauth import oauth
 
 assets = Environment(app)
@@ -30,6 +30,12 @@ def internal_server_error(e):
 def home():
     from models.image import Image
     from models.user import User
-    users = User.select()
-    images = Image.select().order_by(Image.created_at.desc())
-    return render_template('home.html',images=images,users=users)
+    from models.fanidol import FanIdol
+    from peewee import JOIN
+    # show all idols
+    idols = User.select().join(FanIdol,on=(FanIdol.idol==User.id)).where(FanIdol.fan==current_user.id)
+    idol_list = [x.id for x in idols]
+    idol_list.append(current_user.id)
+    images = Image.select().where((Image.user.in_(idol_list))).order_by(Image.created_at.desc())
+    not_following = User.select().where(User.id.not_in(idol_list))
+    return render_template('home.html',images=images,users=idols,not_following=not_following)

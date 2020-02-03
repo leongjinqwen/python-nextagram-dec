@@ -17,11 +17,7 @@ class User(UserMixin,BaseModel):
         from models.fanidol import FanIdol
         # check if has relationship in database
         if self.follow_status(idol)==None:
-            # check if idol is private
-            if idol.private==True:
-                return FanIdol(fan=self.id,idol=idol.id,approved=False).save()
-            else:
-                return FanIdol(fan=self.id,idol=idol.id,approved=True).save()
+            return FanIdol(fan=self.id,idol=idol.id).save()
         else:
             return 0
 
@@ -35,7 +31,9 @@ class User(UserMixin,BaseModel):
 
     def follow_status(self,idol):
         from models.fanidol import FanIdol
-        # check following status : if already follow => return that row, else return None(mean not follow this idol before)
+        # check following status : 
+        # if already follow => return that row, 
+        # else return None(mean not follow this idol before)
         return FanIdol.get_or_none(FanIdol.fan==self.id,FanIdol.idol==idol.id)
 
     @hybrid_property
