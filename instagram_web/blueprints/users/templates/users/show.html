@@ -33,14 +33,18 @@
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">followers</p>
-          <p class="title">{{user.followers | length}}</p>
+          <a style="text-decoration: none;color:black" href="#" data-toggle="modal" data-target="#followers">
+            <p class="heading">followers</p>
+            <p class="title">{{user.followers | length}}</p>
+          </a>
         </div>
       </div>
       <div class="level-item has-text-centered">
         <div>
-          <p class="heading">following</p>
-          <p class="title">{{user.followings | length}}</p>
+          <a style="text-decoration: none;color:black" href="#" data-toggle="modal" data-target="#followings">
+            <p class="heading">following</p>
+            <p class="title">{{user.followings | length}}</p>
+          </a>
         </div>
       </div>
       <div class="level-item has-text-centered">
@@ -79,7 +83,6 @@
   {% else %}
     <h5 class="text-center text-secondary mt-5">Follow @{{user.username}} to view the profile.</h5>
   {% endif %}
-  
 </div>
 
 <!-- cancel request Modal -->
@@ -109,4 +112,46 @@
   </div>
 </div>
 
+<!-- followers Modal -->
+<div class="modal fade" id="followers" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h6>Followers</h6>
+      </div>
+      <div class="modal-body">
+        {% for fan in user.followers %}
+        <div class="mb-2">
+          <img src="{{fan.profile_image_url }}" width="48" class="img-thumbnail rounded-circle" alt="profile_image" />
+          <span>{{fan.username}}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- followings Modal -->
+<div class="modal fade" id="followings" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h6>Following</h6>
+      </div>
+      <div class="modal-body">
+        {% for idol in user.followings %}
+        <div class="d-flex justify-content-between">
+          <a style="text-decoration: none;color:black" href="{{url_for('users.show',username=idol.username)}}">
+            <img src="{{idol.profile_image_url }}" width="48" class="img-thumbnail rounded-circle" alt="profile_image" />
+            <span>{{idol.username}}</span>
+          </a>
+          <div class="align-self-center">
+            <a class="btn btn-outline-dark btn-sm" href="{{url_for('follows.unfollow',idol_id=idol.id)}}">Following</a>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

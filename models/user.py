@@ -15,19 +15,19 @@ class User(UserMixin,BaseModel):
     
     def follow(self,idol):
         from models.fanidol import FanIdol
-        # check if idol is private
-        if idol.private==True:
-            return FanIdol(fan=self.id,idol=idol.id,approved=False).save()
+        # check if has relationship in database
+        if self.follow_status(idol)==None:
+            # check if idol is private
+            if idol.private==True:
+                return FanIdol(fan=self.id,idol=idol.id,approved=False).save()
+            else:
+                return FanIdol(fan=self.id,idol=idol.id,approved=True).save()
         else:
-            return FanIdol(fan=self.id,idol=idol.id,approved=True).save()
+            return 0
 
     def unfollow(self,idol):
         from models.fanidol import FanIdol
         return FanIdol.delete().where(FanIdol.fan==self.id,FanIdol.idol==idol.id).execute()
-
-    # def delete_request(self,fan):
-    #     from models.fanidol import FanIdol
-    #     return FanIdol.delete().where(FanIdol.fan==fan.id,FanIdol.idol==self.id).execute()
 
     def approve_request(self,fan):
         from models.fanidol import FanIdol
