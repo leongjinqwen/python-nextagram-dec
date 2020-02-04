@@ -31,7 +31,6 @@ def home():
     from models.image import Image
     from models.user import User
     from models.fanidol import FanIdol
-    from peewee import JOIN
     # show all idols
     idols = User.select().join(FanIdol,on=(FanIdol.idol==User.id)).where(FanIdol.fan==current_user.id)
     idol_list = [x.id for x in idols]
