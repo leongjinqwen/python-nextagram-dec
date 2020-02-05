@@ -130,3 +130,34 @@ def login():
         }
     }
     '''
+
+@users_api_blueprint.route('/check_name', methods=['GET'])
+def checkname():
+    username = request.args.get('username')
+    if not username:
+        responseObject = {
+            'status': 'failed',
+            'message': 'No username found'
+        }
+        return jsonify(responseObject), 400
+    else:
+        user = User.get_or_none(User.username==username)
+        if not user:
+            responseObject = {
+                'exists': False,
+                'valid': True
+            }
+            return jsonify(responseObject)
+        else:
+            responseObject = {
+                'exists': True,
+                'valid': False
+            }
+            return jsonify(responseObject)
+    # example of output if username not exist
+    '''
+    {
+        "exists": false,
+        "valid": true
+    }
+    '''
